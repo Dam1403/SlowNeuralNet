@@ -1,2 +1,2 @@
 # SlowNeuralNet
-A python neural net implementation
+A slow python neural net implementation
