@@ -1,28 +1,60 @@
+from Neuron import Neuron
+from RelationTable import RelationTable
 class NeuralNet:
-
-
-
+#if you can get solve weight = deltaO  you can piecewise node functs within threads
     def __init__(self, layer_count, layer_depth,activation_function):
-        layer_count = layer_count + 2
-        #plus 2 for input and output layers
+        self.true_layer_count = layer_count + 2
+        self.layer_count = layer_count
+        self.weight_layer_count = layer_count - 1
 
+
+        #plus 2 for input and output layers
         self.input_length = layer_depth
         self.layers = [];
-
-        for i in range(0,layer_count):
+        for i in range(0,self.layer_count):
             layer = []
             for j in range(0,layer_depth):
-                layer += Neuron()
-            self.layers += layer
-        self.rel_table = RelationTable(layer_count,layer_depth)
+                layer.append(Neuron(activation_function))
+            self.layers.append(layer)
+        self.rel_table = RelationTable(self.layer_count,layer_depth)
+
+
+    def __str__(self):
+        result = ""
+        result += "LayerCount: " + str(self.layer_count) + "\n"
+        result += "LayerDepth: " + str(self.input_length) + "\n"
+        result += "Weights: \n\n" + str(self.rel_table)
+        return result
 
 
 
-
-    def set_weights(self,low_bound,high_bound):
+    #[layer_index][in_neuron_index][out_nueron_index]
+    def set_weights_rand(self,low_bound,high_bound):
         self.rel_table.init_weights(low_bound,high_bound)
+    def set_weights_arr(self,arr3d):
+        # +2(IO layers) -1(WeightLayers) error check better
+        if(len(arr3d) != self.weight_layer_count):
+            raise NNWeightLayerException("Weight Array Layer Count Mismatch")
+        if(len(arr3d[0][0]) != self.input_length):
+            raise NNWeightDepthException("Weight Array Layer Depth Mismatch")
 
-        
+        for layer_index in range(0,len(arr3d)):
+            for in_neuron_index in range(0,len(arr3d[0][0])):
+                for out_nueron_index in range(0,len(arr3d[0][0])):
+                    value = arr3d[layer_index][in_neuron_index][out_nueron_index]
+                    self.rel_table.rel_set(layer_index,in_neuron_index,out_nueron_index,value)
+
+
+    def set_weights_file(self,filename):
+        with open(filename,"r") as f:
+            line = f.readline()
+            while line.strip() != "":
+                line = line.strip()
+                linearr = line.split(" ")
+
+
+
+
     def evaulate(self, input_arr):
         self.layers[0] = input_arr.copy()
 
@@ -46,10 +78,19 @@ class NeuralNet:
             out_neuron.value = new_value
 
 
+def strs_cast_floats(str_arr):
+    for i in range(0,len(str_arr)):
+        str_arr[i] = float(i)
+    return str_arr
 
 class NNInputLengthException(Exception):
     pass
 
-
 class NNLayerLengthException(Exception):
+    pass
+
+class NNWeightLayerException(Exception):
+    pass
+
+class NNWeightDepthException(Exception):
     pass
