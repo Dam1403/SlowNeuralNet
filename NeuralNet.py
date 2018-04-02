@@ -73,7 +73,7 @@ class NeuralNet:
             for in_neuron_index in range(self.input_length):
                 in_neuron = in_layer[in_neuron_index]
                 weight = self.rel_table.rel_get(layer_index,in_neuron_index,out_neuron_index)
-                new_value += in_neuron.act_funct(in_neuron.value * weight)
+            new_value += in_neuron.act_funct(in_neuron.value * weight)
             out_neuron.value = new_value
 
 
