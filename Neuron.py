@@ -5,4 +5,4 @@ class Neuron:
         self.act_funct = activation_function
 
     def __str__(self):
-        return "Neuron: " + self.value + " Afunction: " + self.activation_function.__name__
+        return "Neuron: " + str(self.value) + " Afunction: " + self.act_funct.__name__

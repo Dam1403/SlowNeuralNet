@@ -13,7 +13,7 @@ class RelationTable:
     def __str__(self):
         result = ""
         for layer_index in range(0, self.layer_count):
-            result += "Layer " + str(layer_index) + ":\n\n"
+            result += "RelationLayer " + str(layer_index) + ":\n\n"
             result += arr2d_to_str(self.rel_arr[layer_index])
             result += "\n"
         return result
