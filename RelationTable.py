@@ -37,6 +37,6 @@ def arr2d_to_str(arr2d):
     for i in range(0,len(arr2d)):
         result += "| "
         for j in range(0,len(arr2d[i])):
-            result += str(round(arr2d[i][j],2)) + " "
+            result += str(round(arr2d[j][i],2)) + " "
         result += "|\n"
     return result
